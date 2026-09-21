@@ -14,9 +14,9 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 # What to run
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a single job called "build", I renamed "build_Job"
   build_job:      # remember to set the job name here or below with name: build_job
-    # The type of runner that the job will run on
+    # The type of runner that the job will run on 
     # <ctrl> + <space> to see the list of available runners
     runs-on: ubuntu-latest
     #runs-on: macos-latest

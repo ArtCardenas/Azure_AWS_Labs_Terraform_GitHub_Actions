@@ -1,0 +1,362 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachineScaleSets_tacoweb_vmss_name": {
+            "defaultValue": "tacoweb-vmss",
+            "type": "String"
+        },
+        "loadBalancers_tacoweb_lb_externalid": {
+            "defaultValue": "/subscriptions/2213e8b1-dbc7-4d54-8aff-b5e315df5e5b/resourceGroups/943-89eb054f-deploy-an-azure-vm-scale-set-with-loa/providers/Microsoft.Network/loadBalancers/tacoweb-lb",
+            "type": "String"
+        },
+        "networkSecurityGroups_nsg_tacoweb_vmss_externalid": {
+            "defaultValue": "/subscriptions/2213e8b1-dbc7-4d54-8aff-b5e315df5e5b/resourceGroups/943-89eb054f-deploy-an-azure-vm-scale-set-with-loa/providers/Microsoft.Network/networkSecurityGroups/nsg-tacoweb-vmss",
+            "type": "String"
+        },
+        "virtualNetworks_taco_wagon_app_externalid": {
+            "defaultValue": "/subscriptions/2213e8b1-dbc7-4d54-8aff-b5e315df5e5b/resourceGroups/943-89eb054f-deploy-an-azure-vm-scale-set-with-loa/providers/Microsoft.Network/virtualNetworks/taco-wagon-app",
+            "type": "String"
+        },
+        "disks_tacoweb_vmss_tacoweb_vmss_0_OsDisk_1_e3fdf647efc54e6396909ad1b8728ee3_externalid": {
+            "defaultValue": "/subscriptions/2213e8b1-dbc7-4d54-8aff-b5e315df5e5b/resourceGroups/943-89eb054f-deploy-an-azure-vm-scale-set-with-loa/providers/Microsoft.Compute/disks/tacoweb-vmss_tacoweb-vmss_0_OsDisk_1_e3fdf647efc54e6396909ad1b8728ee3",
+            "type": "String"
+        },
+        "disks_tacoweb_vmss_tacoweb_vmss_3_OsDisk_1_690affc2f66b4628962f94f179f23ccf_externalid": {
+            "defaultValue": "/subscriptions/2213e8b1-dbc7-4d54-8aff-b5e315df5e5b/resourceGroups/943-89eb054f-deploy-an-azure-vm-scale-set-with-loa/providers/Microsoft.Compute/disks/tacoweb-vmss_tacoweb-vmss_3_OsDisk_1_690affc2f66b4628962f94f179f23ccf",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2025-04-01",
+            "name": "[parameters('virtualMachineScaleSets_tacoweb_vmss_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "Standard_F2",
+                "tier": "Standard",
+                "capacity": 2
+            },
+            "properties": {
+                "singlePlacementGroup": true,
+                "orchestrationMode": "Uniform",
+                "upgradePolicy": {
+                    "mode": "Manual"
+                },
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ],
+                    "forceDeletion": false
+                },
+                "virtualMachineProfile": {
+                    "osProfile": {
+                        "computerNamePrefix": "[parameters('virtualMachineScaleSets_tacoweb_vmss_name')]",
+                        "adminUsername": "azureuser",
+                        "linuxConfiguration": {
+                            "disablePasswordAuthentication": true,
+                            "ssh": {
+                                "publicKeys": [
+                                    {
+                                        "path": "/home/azureuser/.ssh/authorized_keys",
+                                        "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDk3YnE9QEyNwCCGll+kWgHtsoPw9w4HxthuOqw1rcEMpJNMemzmbsXH8o/hQw/Ry4JtUMrz8l40Z8P1/bYCIJeAO0CaATIWzFcNwaEUJYIummIEMOIwwczs616EJh13vspdQuC50XBRj0Qapc3AWS9SUCv3E/tVqm6auVl4SJBSZq9lPA8hgTZQmo6na9KAWRo4xotJSdLgecYOBXvbgUmm32uiy806DSDp85ktjse72fbqauQFaBeFFKjRVWz4jNWqJ/SfUIXE5BXZz+iOZIXbmecz+scuCKdTiaXBfTHISCzQ8TLG2s8uTMTJ/62XAkm7l95VW4HWCixn6S7j8Nx6A3nVqTG/ztHG5zc7FLFfq1wfXsUNJVbXJvKenph2z39XxoT5ZC4MfYO6YCPRIeZ0NL+p262B/Z5RzFAvrPr4oKcda9TZue0SN/HCOtmjDlEjUKdyWkqhmhIxkr6DzmmEXabLWLdK0l2NcdfTsaPFSvAuLBMjYuy992CyAnF4z1mMNijSZwfsvAg6FRd6CNZbJXCt8FtTffueBinbPvFcbj7eCYBWnlFETlvTUlTyfQYUv175Haro8dq/ZewRbNKFw8lSwoal01U7gd0RCQfYJmzz4wt02BweNe8f3JCQel8EFz32rPm/ZF8cjRpALBzbN7xaQbiVeGpkDKbqoAPRQ==\n"
+                                    }
+                                ]
+                            },
+                            "provisionVMAgent": true
+                        },
+                        "secrets": [],
+                        "allowExtensionOperations": true,
+                        "requireGuestProvisionSignal": true
+                    },
+                    "storageProfile": {
+                        "osDisk": {
+                            "osType": "Linux",
+                            "createOption": "FromImage",
+                            "caching": "ReadWrite",
+                            "writeAcceleratorEnabled": false,
+                            "managedDisk": {
+                                "storageAccountType": "Standard_LRS"
+                            },
+                            "diskSizeGB": 30
+                        },
+                        "imageReference": {
+                            "publisher": "Canonical",
+                            "offer": "0001-com-ubuntu-server-jammy",
+                            "sku": "22_04-lts",
+                            "version": "latest"
+                        }
+                    },
+                    "networkProfile": {
+                        "healthProbe": {
+                            "id": "[concat(parameters('loadBalancers_tacoweb_lb_externalid'), '/probes/http')]"
+                        },
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "tacoweb-nic",
+                                "properties": {
+                                    "primary": true,
+                                    "enableAcceleratedNetworking": false,
+                                    "disableTcpStateTracking": false,
+                                    "networkSecurityGroup": {
+                                        "id": "[parameters('networkSecurityGroups_nsg_tacoweb_vmss_externalid')]"
+                                    },
+                                    "dnsSettings": {
+                                        "dnsServers": []
+                                    },
+                                    "enableIPForwarding": false,
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "primary",
+                                            "properties": {
+                                                "primary": true,
+                                                "subnet": {
+                                                    "id": "[concat(parameters('virtualNetworks_taco_wagon_app_externalid'), '/subnets/web')]"
+                                                },
+                                                "privateIPAddressVersion": "IPv4",
+                                                "loadBalancerBackendAddressPools": [
+                                                    {
+                                                        "id": "[concat(parameters('loadBalancers_tacoweb_lb_externalid'), '/backendAddressPools/BackEndAddressPool')]"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "diagnosticsProfile": {
+                        "bootDiagnostics": {
+                            "enabled": false
+                        }
+                    },
+                    "extensionProfile": {
+                        "extensions": [],
+                        "extensionsTimeBudget": "PT1H30M"
+                    },
+                    "priority": "Regular"
+                },
+                "overprovision": true,
+                "doNotRunExtensionsOnOverprovisionedVMs": false,
+                "platformFaultDomainCount": 5
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets/virtualMachines",
+            "apiVersion": "2025-04-01",
+            "name": "[concat(parameters('virtualMachineScaleSets_tacoweb_vmss_name'), '/0')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_tacoweb_vmss_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_F2",
+                "tier": "Standard"
+            },
+            "properties": {
+                "networkProfileConfiguration": {
+                    "networkInterfaceConfigurations": [
+                        {
+                            "name": "tacoweb-nic",
+                            "properties": {
+                                "primary": true,
+                                "enableAcceleratedNetworking": false,
+                                "disableTcpStateTracking": false,
+                                "networkSecurityGroup": {
+                                    "id": "[parameters('networkSecurityGroups_nsg_tacoweb_vmss_externalid')]"
+                                },
+                                "dnsSettings": {
+                                    "dnsServers": []
+                                },
+                                "enableIPForwarding": false,
+                                "ipConfigurations": [
+                                    {
+                                        "name": "primary",
+                                        "properties": {
+                                            "primary": true,
+                                            "subnet": {
+                                                "id": "[concat(parameters('virtualNetworks_taco_wagon_app_externalid'), '/subnets/web')]"
+                                            },
+                                            "privateIPAddressVersion": "IPv4",
+                                            "loadBalancerBackendAddressPools": [
+                                                {
+                                                    "id": "[concat(parameters('loadBalancers_tacoweb_lb_externalid'), '/backendAddressPools/BackEndAddressPool')]"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_F2"
+                },
+                "resilientVMDeletionStatus": "Disabled",
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-jammy",
+                        "sku": "22_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "tacoweb-vmss_tacoweb-vmss_0_OsDisk_1_e3fdf647efc54e6396909ad1b8728ee3",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[parameters('disks_tacoweb_vmss_tacoweb_vmss_0_OsDisk_1_e3fdf647efc54e6396909ad1b8728ee3_externalid')]"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "tacoweb-vmss000000",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDk3YnE9QEyNwCCGll+kWgHtsoPw9w4HxthuOqw1rcEMpJNMemzmbsXH8o/hQw/Ry4JtUMrz8l40Z8P1/bYCIJeAO0CaATIWzFcNwaEUJYIummIEMOIwwczs616EJh13vspdQuC50XBRj0Qapc3AWS9SUCv3E/tVqm6auVl4SJBSZq9lPA8hgTZQmo6na9KAWRo4xotJSdLgecYOBXvbgUmm32uiy806DSDp85ktjse72fbqauQFaBeFFKjRVWz4jNWqJ/SfUIXE5BXZz+iOZIXbmecz+scuCKdTiaXBfTHISCzQ8TLG2s8uTMTJ/62XAkm7l95VW4HWCixn6S7j8Nx6A3nVqTG/ztHG5zc7FLFfq1wfXsUNJVbXJvKenph2z39XxoT5ZC4MfYO6YCPRIeZ0NL+p262B/Z5RzFAvrPr4oKcda9TZue0SN/HCOtmjDlEjUKdyWkqhmhIxkr6DzmmEXabLWLdK0l2NcdfTsaPFSvAuLBMjYuy992CyAnF4z1mMNijSZwfsvAg6FRd6CNZbJXCt8FtTffueBinbPvFcbj7eCYBWnlFETlvTUlTyfQYUv175Haro8dq/ZewRbNKFw8lSwoal01U7gd0RCQfYJmzz4wt02BweNe8f3JCQel8EFz32rPm/ZF8cjRpALBzbN7xaQbiVeGpkDKbqoAPRQ==\n"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat(resourceId('Microsoft.Compute/virtualMachineScaleSets/virtualMachines', parameters('virtualMachineScaleSets_tacoweb_vmss_name'), '0'), '/networkInterfaces/tacoweb-nic')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets/virtualMachines",
+            "apiVersion": "2025-04-01",
+            "name": "[concat(parameters('virtualMachineScaleSets_tacoweb_vmss_name'), '/3')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_tacoweb_vmss_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_F2",
+                "tier": "Standard"
+            },
+            "properties": {
+                "networkProfileConfiguration": {
+                    "networkInterfaceConfigurations": [
+                        {
+                            "name": "tacoweb-nic",
+                            "properties": {
+                                "primary": true,
+                                "enableAcceleratedNetworking": false,
+                                "disableTcpStateTracking": false,
+                                "networkSecurityGroup": {
+                                    "id": "[parameters('networkSecurityGroups_nsg_tacoweb_vmss_externalid')]"
+                                },
+                                "dnsSettings": {
+                                    "dnsServers": []
+                                },
+                                "enableIPForwarding": false,
+                                "ipConfigurations": [
+                                    {
+                                        "name": "primary",
+                                        "properties": {
+                                            "primary": true,
+                                            "subnet": {
+                                                "id": "[concat(parameters('virtualNetworks_taco_wagon_app_externalid'), '/subnets/web')]"
+                                            },
+                                            "privateIPAddressVersion": "IPv4",
+                                            "loadBalancerBackendAddressPools": [
+                                                {
+                                                    "id": "[concat(parameters('loadBalancers_tacoweb_lb_externalid'), '/backendAddressPools/BackEndAddressPool')]"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_F2"
+                },
+                "resilientVMDeletionStatus": "Disabled",
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-jammy",
+                        "sku": "22_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "tacoweb-vmss_tacoweb-vmss_3_OsDisk_1_690affc2f66b4628962f94f179f23ccf",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[parameters('disks_tacoweb_vmss_tacoweb_vmss_3_OsDisk_1_690affc2f66b4628962f94f179f23ccf_externalid')]"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "tacoweb-vmss000003",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDk3YnE9QEyNwCCGll+kWgHtsoPw9w4HxthuOqw1rcEMpJNMemzmbsXH8o/hQw/Ry4JtUMrz8l40Z8P1/bYCIJeAO0CaATIWzFcNwaEUJYIummIEMOIwwczs616EJh13vspdQuC50XBRj0Qapc3AWS9SUCv3E/tVqm6auVl4SJBSZq9lPA8hgTZQmo6na9KAWRo4xotJSdLgecYOBXvbgUmm32uiy806DSDp85ktjse72fbqauQFaBeFFKjRVWz4jNWqJ/SfUIXE5BXZz+iOZIXbmecz+scuCKdTiaXBfTHISCzQ8TLG2s8uTMTJ/62XAkm7l95VW4HWCixn6S7j8Nx6A3nVqTG/ztHG5zc7FLFfq1wfXsUNJVbXJvKenph2z39XxoT5ZC4MfYO6YCPRIeZ0NL+p262B/Z5RzFAvrPr4oKcda9TZue0SN/HCOtmjDlEjUKdyWkqhmhIxkr6DzmmEXabLWLdK0l2NcdfTsaPFSvAuLBMjYuy992CyAnF4z1mMNijSZwfsvAg6FRd6CNZbJXCt8FtTffueBinbPvFcbj7eCYBWnlFETlvTUlTyfQYUv175Haro8dq/ZewRbNKFw8lSwoal01U7gd0RCQfYJmzz4wt02BweNe8f3JCQel8EFz32rPm/ZF8cjRpALBzbN7xaQbiVeGpkDKbqoAPRQ==\n"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat(resourceId('Microsoft.Compute/virtualMachineScaleSets/virtualMachines', parameters('virtualMachineScaleSets_tacoweb_vmss_name'), '3'), '/networkInterfaces/tacoweb-nic')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    ]
+}

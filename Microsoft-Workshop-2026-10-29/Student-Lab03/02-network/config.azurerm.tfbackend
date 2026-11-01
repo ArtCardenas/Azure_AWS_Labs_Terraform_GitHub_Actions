@@ -1,0 +1,4 @@
+storage_account_name = "stdemodevswe001cfc"
+container_name       = "network"
+key                  = "terraform.tfstate"
+use_azuread_auth     = true
